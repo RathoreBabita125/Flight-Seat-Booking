@@ -64,5 +64,23 @@ export type MyContext = {
     fullName:string;
     email:string;
     role: string ;
-  } 
+  } | null
+}
+
+export type SeatDetails={
+  id:string;
+  seatNumber:string;
+  status:SeatStatus;
+}
+
+export type BookingDetails={
+  id:string;
+  status:BookingStatus;
+  user:UserDeatils;
+  seat:string;
+}
+
+export type BookingResponse={
+  message:string;
+  bookings?:string
 }

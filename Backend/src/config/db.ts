@@ -1,7 +1,7 @@
 import { DataSource } from "typeorm";
-import { User } from "../modules/user.module";
-import { Booking } from "../modules/booking.module";
-import { Seat } from "../modules/seat.module";
+import { User } from "../modules/userModule";
+import { Booking } from "../modules/bookingModule";
+import { Seat } from "../modules/seatModule";
 
 export const AppDataSource=new DataSource({
     type:'postgres',

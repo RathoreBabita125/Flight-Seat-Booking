@@ -1,6 +1,6 @@
 import { userInputFields } from "../constants/consts";
 import { MyContext, UserDeatils, UserResponseType, UserRole } from "../datatypes/datatypes";
-import { User } from "../modules/user.module";
+import { User } from "../modules/userModule";
 import { generateToken } from "../utils/generateToken";
 import { validateUser } from "../validators/validateUser";
 import bcrypt from 'bcrypt';
@@ -171,13 +171,13 @@ export const userResolver = {
                 const userLoginInput = ["oldPassword", "newPassword"];
                 validateUser(userData, userLoginInput);
 
-                if (!context.user.email) {
+                if (!context.user?.email) {
                     throw new Error("You are not logged in. First login to change password.");
                 }
 
                 const user = await userRepo.findOne({
                     where: {
-                        id: context.user.id,
+                        id: context.user?.id,
                     },
                     select:{
                         id:true,

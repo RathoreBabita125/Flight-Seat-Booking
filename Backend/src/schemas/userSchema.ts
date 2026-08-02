@@ -30,7 +30,7 @@ export const userSchema=gql`
     }
 
     type Query{
-        getUsers:[User]
+        getAllUsers:[User]
     }
 
     type Mutation{
