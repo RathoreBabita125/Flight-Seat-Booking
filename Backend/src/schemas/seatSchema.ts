@@ -1,0 +1,21 @@
+import gql from 'graphql-tag';
+
+export const seatSchema=gql`
+
+    enum SeatStatus{
+        Available
+        Booked
+    }
+
+    type Seat{
+        id:ID!
+        seatNumber:String!
+        status:SeatStatus
+        bookings:ID!
+    }
+
+    type Query{
+        getAllSeats:[Seat]
+    }
+
+`

@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { SeatStatus } from "../datatypes/datatypes";
-import { Booking } from "./booking.module";
+import { Booking } from "./bookingModule";
 
 @Entity()
 export class Seat {

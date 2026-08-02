@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { User } from "./user.module";
-import { Seat } from "./seat.module";
+import { User } from "./userModule";
+import { Seat } from "./seatModule";
 import { BookingStatus } from "../datatypes/datatypes";
 
 @Entity()
@@ -18,7 +18,7 @@ export class Booking {
     updatedAt!: Date;
 
     @ManyToOne(() => User, (user) => user.bookings)
-    user!: User
+    user!: User;
 
     @ManyToOne(() => Seat, (seat) => seat.bookings)
     seat!: Seat;

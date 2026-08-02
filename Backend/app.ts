@@ -7,8 +7,10 @@ import { resolvers } from './src/controllers/resolvers';
 import { expressMiddleware } from '@as-integrations/express5';
 import { MyContext } from './src/datatypes/datatypes';
 import cors from 'cors';
-import { AuthMiddleware } from './src/middlewares/AuthMiddleware';
+import { AuthMiddleware } from './src/middlewares/authMiddleware';
 import cookieParser from 'cookie-parser';
+import { seedAdmin } from './src/seed/seedAdmin';
+import { seedSeats } from './src/seed/seedSeat';
 
 dotenv.config();
 
@@ -23,12 +25,16 @@ const serverStart = async () => {
         await AppDataSource.initialize();
         console.log("Database is connected successfully.");
 
+        await seedAdmin();
+        await seedSeats();
+
         const server = new ApolloServer<MyContext>({
             typeDefs: typeDefs,
             resolvers: resolvers
         });
 
         await server.start();
+
 
         app.use('/graphql',
             express.json(),

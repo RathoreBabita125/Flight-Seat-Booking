@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { GenderType, UserRole } from "../datatypes/datatypes";
-import { Booking } from "./booking.module";
+import { Booking } from "./bookingModule";
 
 @Entity()
 export class User {
