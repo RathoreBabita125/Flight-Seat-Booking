@@ -1,6 +1,6 @@
-import { FindOptionsWhere, ILike } from "typeorm";
-import { BookingStatus, MyContext, UserRole } from "../datatypes/datatypes";
+import { BookingDetails, BookingResponse, BookingStatus, MyContext, SeatStatus, UserRole } from "../datatypes/datatypes";
 import { Booking } from "../modules/bookingModule";
+import { Seat } from "../modules/seatModule";
 import { User } from "../modules/userModule";
 
 export const adminResolver = {
@@ -59,38 +59,48 @@ export const adminResolver = {
                 throw new Error(`You don't have access to know all users bookings. ${(error as Error).message}`);
             }
         },
-
-        // getAllBookings: async (_: any, { status }: { status: BookingStatus }, context: MyContext) => {
-        //     const bookingRepo = context.db.getRepository(Booking);
-        //     const where: FindOptionsWhere<Booking> = {};
-
-        //     if (status) {
-        //         where.status = status;
-        //     }
-
-        //     try {
-        //         if (context.user?.role === UserRole.ADMIN) {
-        //             const allBookings = await bookingRepo.find(
-        //                 {
-        //                     where,
-        //                     relations: {
-        //                         seat: true,
-        //                         user: true
-        //                     }
-        //                 }
-        //             );
-        //             return allBookings;
-        //         }
-        //         else{
-        //             throw new Error("Unauthorized access.");
-        //         }
-        //     } catch (error) {
-        //         throw new Error(`You don't have access to know all users bookings. ${(error as Error).message}`);
-        //     }
-        // },
     },
 
     Mutation: {
+        resetAllBooking: async (_: any, bookingData: BookingDetails, context: MyContext): Promise<BookingResponse> => {
+            const bookingRepo = context.db.getRepository(Booking);
+            const seatRepo = context.db.getRepository(Seat);
 
+            try {
+
+                if (!context.user) {
+                    throw new Error("You are not logged in. Please first login.");
+                }
+
+                if (context.user.role !== UserRole.ADMIN) {
+                    throw new Error("You are not allowed to reset all bookings.");
+                }
+
+                await seatRepo.update(
+                    {
+                        status:SeatStatus.BOOKED
+                    },
+                    {
+                        status: SeatStatus.AVAILABLE
+                    }
+                );
+
+                const savedBooking=await bookingRepo.update(
+                    {
+                        status: BookingStatus.CONFIRMED
+                    },
+                    {
+                        status: BookingStatus.CANCELLED
+                    }
+                );
+
+                return {
+                    message: "All booking has been reset successfully.",
+                }
+
+            } catch (error) {
+                throw new Error(`Reset booking failed: ${(error as Error).message}`);
+            }
+        },
     }
 }
