@@ -15,7 +15,9 @@ export const seatSchema=gql`
     }
 
     type Query{
-        getAllSeats:[Seat]
+        getAllSeats(
+            status:SeatStatus
+        ):[Seat]
     }
 
 `

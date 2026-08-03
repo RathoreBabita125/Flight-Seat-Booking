@@ -39,5 +39,9 @@ export const bookingSchema=gql`
             id:ID
             status:BookingStatus
         ):BookingResponse
+
+        autoAssignSeat:BookingResponse
+
+        resetAllBooking:BookingResponse
     }
 `

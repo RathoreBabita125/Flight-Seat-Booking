@@ -1,5 +1,6 @@
 import { DataSource } from "typeorm";
 import { Request, Response } from "express";
+import { User } from "../modules/userModule";
 
 export enum UserRole {
   ADMIN = "Admin",
@@ -76,11 +77,24 @@ export type SeatDetails={
 export type BookingDetails={
   id:string;
   status:BookingStatus;
-  user:UserDeatils;
-  seat:string;
+  user:{
+    id: string; 
+    fullName:string;
+    email:string;
+    role: string ;
+    gender: GenderType;
+    age: number;
+    phone: string;
+  };
+  seat:SeatDetails;
 }
 
 export type BookingResponse={
   message:string;
-  bookings?:string
+  bookings?:BookingDetails
+}
+
+export type SeatResponse={
+  message:string;
+  seat?:SeatDetails;
 }
