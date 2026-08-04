@@ -10,7 +10,7 @@
     align-items: center;
 }
 
-.login-section {
+.login-section, .signup-form, .forget-form {
     width: 30vw;
     height: 50vh;
     display: flex;
@@ -25,4 +25,8 @@
 .login-form {
     width: 80%;
     height: 40vh;
+}
+
+.signup-form{
+    height: 65vh;
 }

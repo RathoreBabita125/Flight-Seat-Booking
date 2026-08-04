@@ -48,13 +48,13 @@ export const userSchema=gql`
             password:String!
         ):UserResponse
 
-        logout:UserResponse
-
         forget(
             email:String!
             newPassword:String!
             confirmPassword:String!
         ):UserResponse
+
+        logout:UserResponse
 
         changePassword(
             oldPassword: String!
