@@ -7,7 +7,22 @@ import bcrypt from 'bcrypt';
 
 export const userResolver = {
     Query: {
-
+        getMe: async (_: any, __: any, context: MyContext) => {
+            const userRepo = context.db.getRepository(User);
+            try {
+                if (!context.user) {
+                    throw new Error("Unauthorized Access.");
+                }
+                const user = await userRepo.findOne({
+                    where: {
+                        id: context.user.id
+                    }
+                });
+                return user;
+            } catch (error) {
+                throw new Error((error as Error).message);
+            }
+        }
     },
 
     Mutation: {
@@ -69,12 +84,12 @@ export const userResolver = {
                     where: {
                         email: userData.email,
                     },
-                    select:{
-                        id:true,
-                        fullName:true,
-                        email:true,
-                        password:true,
-                        role:true
+                    select: {
+                        id: true,
+                        fullName: true,
+                        email: true,
+                        password: true,
+                        role: true
                     }
                 });
 
@@ -82,7 +97,7 @@ export const userResolver = {
                     throw new Error("User does not exist.");
                 }
 
-                const vaildUser =await bcrypt.compare(userData.password, user.password);
+                const vaildUser = await bcrypt.compare(userData.password, user.password);
 
                 if (!vaildUser) {
                     throw new Error("Invalid Crendentials.");
@@ -102,7 +117,7 @@ export const userResolver = {
                         maxAge: 7 * 24 * 60 * 60 * 1000
                     }
                 );
-                
+
                 return {
                     message: "You have successfully logged in.",
                 }
@@ -165,8 +180,8 @@ export const userResolver = {
         },
 
         changePassword: async (_: any, userData: UserDeatils, context: MyContext): Promise<UserResponseType> => {
-            const userRepo = context.db.getRepository(User);    
-            console.log("context inside change password :", context.user)        
+            const userRepo = context.db.getRepository(User);
+            console.log("context inside change password :", context.user)
             try {
                 const userLoginInput = ["oldPassword", "newPassword"];
                 validateUser(userData, userLoginInput);
@@ -179,21 +194,21 @@ export const userResolver = {
                     where: {
                         id: context.user?.id,
                     },
-                    select:{
-                        id:true,
-                        email:true,
+                    select: {
+                        id: true,
+                        email: true,
                         password: true,
-                        fullName:true,
+                        fullName: true,
                     }
                 });
 
-                if(!user){
+                if (!user) {
                     throw new Error("User not found.");
                 }
 
                 const validPassword = await bcrypt.compare(userData.oldPassword, user?.password);
 
-                if(!validPassword){
+                if (!validPassword) {
                     throw new Error("Email or Password does not match.");
                 }
 

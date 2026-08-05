@@ -1,5 +1,5 @@
 import { Box, Button, IconButton, InputAdornment, Stack, TextField, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LOGIN } from "../../query/user";
 import { useMutation } from "@apollo/client/react";
 import { useState } from "react";
@@ -15,6 +15,7 @@ const Login = () => {
 
     const [showVisible, setShowVisible] = useState(false);
     const [login] = useMutation(LOGIN);
+    const navigate=useNavigate();
 
     const [formData, setFormData] = useState<UserFormData>({
         email: "",
@@ -56,6 +57,7 @@ const Login = () => {
                 email: "",
                 password: "",
             });
+            navigate('/dashboard', {replace:true});
 
         } catch (error: unknown) {
             console.log(error);

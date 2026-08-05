@@ -1,5 +1,19 @@
 import { gql } from '@apollo/client';
 
+
+export const GET_ME = gql`
+    query GetMe {
+        getMe {
+            id
+            fullName
+            email
+            role
+            age
+            gender
+        }
+    }
+`;
+
 export const SIGNUP = gql`
     mutation Register(
         $fullName: String!

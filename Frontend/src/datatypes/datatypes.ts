@@ -20,5 +20,34 @@ export interface FormError {
   age?: string;
 }
 
+export type NavbarProps = {
+  mobileOpen: boolean;
+  setMobileOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  drawerWidth: number;
+};
+
+export type ProtectedRouteProps = {
+  children: React.ReactNode;
+  allowedRoles: string[];
+};
+
+export interface User {
+  id: string;
+  fullName: string;
+  email: string;
+  age:number;
+  gender:string
+  role: string;
+}
+
+export interface AuthState {
+  userAuth: User | null;
+  loading:boolean;
+}
+
+export interface GetMeResponse {
+  getMe: User;
+}
+
 
 

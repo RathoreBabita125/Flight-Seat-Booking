@@ -46,14 +46,17 @@ const ForgotPassword = () => {
     const handleResetPassword = async () => {
 
         try {
-            const inputFields: (keyof UserFormData)[] = ["email", "newPassword", "confirmPassword"];
+
+            if (formData.newPassword !== formData.confirmPassword) {
+                toast.error("Password does not match.");
+            }
+            const inputFields: (keyof UserFormData)[] = ["email", "newPassword"];
             const isValid = validateInput(formData, setError, inputFields);
 
             if (!isValid) {
                 toast.error("Enter valid details");
                 return;
             }
-
             await forgetPassword({
                 variables: {
                     email: formData.email,
@@ -82,7 +85,7 @@ const ForgotPassword = () => {
 
     return (
         <Box className="forget-form">
-            <Stack direction={'column'} sx={{width:'25vw'}}>
+            <Stack direction={'column'} sx={{ width: '25vw' }}>
 
                 <Typography variant="h5" sx={{ color: '#314B5A', fontWeight: 600 }}>Forgot Password</Typography>
 
