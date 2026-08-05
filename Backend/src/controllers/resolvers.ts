@@ -15,5 +15,5 @@ export const resolvers={
         ...adminResolver.Mutation,
         ...passengerResolver.Mutation,
         ...bookingResolver.Mutation,
-    }
+    },
 }

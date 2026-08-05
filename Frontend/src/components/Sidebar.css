@@ -1,0 +1,20 @@
+.show-active-style {
+  margin: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.show-active-style:hover {
+  background-color: #e6f7f8;
+}
+
+.show-active-style.active {
+  background-color: #00a7b5;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 167, 181, 0.3);
+}
+
+.show-active-style.active .icon {
+  color: #fff;
+}

@@ -31,6 +31,7 @@ export const userSchema=gql`
 
     type Query{
         getAllUsers:[User]
+        getMe:User
     }
 
     type Mutation{
