@@ -12,14 +12,15 @@ import MyBooking from "./pages/passenger/MyBooking"
 import { useAppDispatch } from "./redux/hook";
 import { useQuery } from "@apollo/client/react";
 import { GET_ME } from "./query/user";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { GetMeResponse } from "./datatypes/datatypes";
-import { setUser } from "./redux/slice";
-import CheckSeat from "./pages/passenger/CheckSeat";
+import { setLoading, setUser } from "./redux/authSlice";
 import SeatManagement from "./pages/admin/SeatManagement";
 import BookinManagement from "./pages/admin/BookinManagement";
 import Profile from "./pages/login/Profile";
-
+import BookSeat from "./pages/passenger/BookSeat";
+import LoadingCompo from "./common/Loading";
+import FlightImage from "./assets/Flight_Image.jpg"
 const router = createBrowserRouter([
   {
     path: '/',
@@ -55,7 +56,6 @@ const router = createBrowserRouter([
         path: "/dashboard",
         element: <RoleBasedDash />,
       },
-
       {
         path: "user-management",
         element: (
@@ -68,7 +68,7 @@ const router = createBrowserRouter([
         path: "seats-management",
         element: (
           <ProtectedRoute allowedRoles={["Admin"]}>
-            <SeatManagement/>
+            <SeatManagement />
           </ProtectedRoute>
         ),
       },
@@ -76,16 +76,15 @@ const router = createBrowserRouter([
         path: "booking-management",
         element: (
           <ProtectedRoute allowedRoles={["Admin"]}>
-            <BookinManagement/>
+            <BookinManagement />
           </ProtectedRoute>
         ),
       },
-
       {
-        path: "check-seats",
+        path: "book-seat",
         element: (
           <ProtectedRoute allowedRoles={["Passenger"]}>
-            <CheckSeat />
+            <BookSeat />
           </ProtectedRoute>
         ),
       },
@@ -100,8 +99,8 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: (
-          <ProtectedRoute allowedRoles={["Admin","Passenger"]}>
-            <Profile/>
+          <ProtectedRoute allowedRoles={["Admin", "Passenger"]}>
+            <Profile />
           </ProtectedRoute>
         ),
       },
@@ -111,16 +110,28 @@ const router = createBrowserRouter([
 
 function App() {
 
+  const [loader, setLoader] = useState(false);
   const dispatch = useAppDispatch();
-  const { data } = useQuery<GetMeResponse>(GET_ME);
+  const { data, loading } = useQuery<GetMeResponse>(GET_ME);
 
   useEffect(() => {
-    if (data?.getMe) {
-      dispatch(setUser(data.getMe));
-    }
-  }, [data, dispatch]);
+    const img = new Image();
+    img.src = FlightImage;
+    img.onload = () => setLoader(true);
+  }, []);
 
-  console.log("userdata: ", data)
+  useEffect(() => {
+    if (!loading) {
+      if (data?.getMe) {
+        dispatch(setUser(data.getMe));
+      }
+      dispatch(setLoading(false));
+    }
+  }, [data, loading, dispatch]);
+
+  if (!loader) {
+    return <LoadingCompo />
+  }
 
   return <>
     <RouterProvider router={router} />;

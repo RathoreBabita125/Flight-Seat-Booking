@@ -1,21 +1,27 @@
 import { Box, Button, IconButton, InputAdornment, Stack, TextField, Typography } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
-import { LOGIN } from "../../query/user";
-import { useMutation } from "@apollo/client/react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { GET_ME, LOGIN } from "../../query/user";
+import { useLazyQuery, useMutation } from "@apollo/client/react";
 import { useState } from "react";
-import type { FormError, UserFormData } from "../../datatypes/datatypes";
+import type { FormError, GetMeResponse, LoginResponse, LoginVariables, UserFormData } from "../../datatypes/datatypes";
 import { validateInput } from "../../validators/validateInputs";
 import { toast } from "react-toastify";
 import { handleInput } from "../../validators/handleInputs";
 import { handleOnBlurInput } from "../../validators/handleOnBlur";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import type { RootState } from "../../redux/store";
+import { useSelector } from "react-redux";
+import LoadingCompo from "../../common/Loading";
+import { setUser } from "../../redux/authSlice";
+import { useAppDispatch } from "../../redux/hook";
 
 const Login = () => {
 
     const [showVisible, setShowVisible] = useState(false);
-    const [login] = useMutation(LOGIN);
-    const navigate=useNavigate();
+    const [login] = useMutation<LoginResponse, LoginVariables>(LOGIN);
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const [formData, setFormData] = useState<UserFormData>({
         email: "",
@@ -26,6 +32,17 @@ const Login = () => {
         email: "",
         password: "",
     });
+
+    const { userAuth, loading } = useSelector((state: RootState) => state.userData);
+    const [getMe] = useLazyQuery<GetMeResponse>(GET_ME, {
+        fetchPolicy: 'network-only',
+    });
+
+    if (loading) return <LoadingCompo />
+
+    if (userAuth?.role) {
+        return <Navigate to="/dashboard" replace />;
+    }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         handleInput(event, formData, setFormData, error, setError);
@@ -42,22 +59,37 @@ const Login = () => {
 
             if (!isValid) {
                 toast.error("Enter valid details");
+                return;
             }
 
             const response = await login({
                 variables: {
-                    email: formData.email,
-                    password: formData.password
+                    email: formData.email ?? "",
+                    password: formData.password ?? "",
                 }
             });
 
-            console.log(response);
-            toast.success("You have been logged in successfully.");
+            console.log("Login response:", response);
+
+            if (!response?.data?.login?.message) {
+                toast.error("Something went wrong");
+                return;
+            }
+
+            const meResponse = await getMe();
+
+            if (!meResponse?.data?.getMe) {
+                toast.error("Something went wrong");
+                return;
+            }
+
+            dispatch(setUser(meResponse.data.getMe));
             setFormData({
                 email: "",
                 password: "",
             });
-            navigate('/dashboard', {replace:true});
+            toast.success("You have been logged in successfully.");
+            navigate('/dashboard', { replace: true });
 
         } catch (error: unknown) {
             console.log(error);

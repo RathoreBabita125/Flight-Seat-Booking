@@ -18,12 +18,20 @@ import { useNavigate } from 'react-router-dom';
 import type { NavbarProps } from "../datatypes/datatypes";
 import { useSelector } from "react-redux";
 import type { RootState } from "../redux/store";
+import { toast } from "react-toastify";
+import { useAppDispatch } from "../redux/hook";
+import { logoutFn } from "../redux/authSlice";
+import { client } from "../client/client";
+import { LOGOUT } from "../query/user";
+import { useMutation } from "@apollo/client/react";
 
 const Navbar = ({ setMobileOpen, drawerWidth }: NavbarProps) => {
 
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const navigate = useNavigate();
     const { userAuth } = useSelector((state: RootState) => state.userData);
+    const dispatch = useAppDispatch();
+    const [logout] = useMutation(LOGOUT);
 
     console.log("full name : ", userAuth?.fullName);
 
@@ -38,7 +46,15 @@ const Navbar = ({ setMobileOpen, drawerWidth }: NavbarProps) => {
     };
 
     const handleLogout = async () => {
-
+        try {
+            dispatch(logoutFn());
+            await client.clearStore()
+            await logout();
+            toast.success("You have been logged out successfully.");
+            navigate('/login', { replace: true });
+        } catch (error) {
+            toast.error((error as Error).message);
+        }
     }
 
     return (

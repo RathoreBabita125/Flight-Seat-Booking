@@ -1,6 +1,6 @@
 import { Box, Button, Stack, TextField, Typography, MenuItem, InputAdornment, IconButton } from "@mui/material";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import type { FormError, UserFormData } from "../../datatypes/datatypes";
 import { handleInput } from "../../validators/handleInputs";
 import { validateInput } from "../../validators/validateInputs";
@@ -10,6 +10,9 @@ import { SIGNUP } from "../../query/user";
 import { handleOnBlurInput } from "../../validators/handleOnBlur";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { useSelector } from "react-redux";
+import type { RootState } from "../../redux/store";
+import LoadingCompo from "../../common/Loading";
 
 const Signup = () => {
 
@@ -39,6 +42,15 @@ const Signup = () => {
         gender: "",
         age: ""
     });
+
+    const { userAuth, loading } = useSelector((state: RootState) => state.userData);
+
+    if (loading) return <LoadingCompo />
+
+    if (userAuth?.role) {
+        return <Navigate to="/dashboard" replace />;
+    }
+
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         handleInput(event, formData, setFormData, error, setError);

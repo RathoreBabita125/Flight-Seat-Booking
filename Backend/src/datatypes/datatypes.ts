@@ -15,7 +15,7 @@ export enum GenderType {
 
 export enum SeatStatus {
   AVAILABLE = "Available",
-  BOOKED = "Booked"
+  BOOKED = "Booked",
 }
 
 export enum BookingStatus {
@@ -89,6 +89,10 @@ export type BookingDetails={
   seat:SeatDetails;
 }
 
+export type BookingSeat={
+  seat:string;
+}
+
 export type BookingResponse={
   message:string;
   bookings?:BookingDetails
@@ -97,4 +101,16 @@ export type BookingResponse={
 export type SeatResponse={
   message:string;
   seat?:SeatDetails;
+}
+
+export type userFilterProps={
+  fullName: String
+  gender: String
+}
+
+export interface BookingFilter {
+  status?: BookingStatus;
+  fullName?: string;
+  seatNumber?: string;
+  gender?:GenderType;
 }

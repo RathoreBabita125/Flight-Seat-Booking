@@ -5,6 +5,7 @@ export const seatSchema=gql`
     enum SeatStatus{
         Available
         Booked
+        All
     }
 
     type Seat{
@@ -17,6 +18,7 @@ export const seatSchema=gql`
     type Query{
         getAllSeats(
             status:SeatStatus
+            seatNumber: String
         ):[Seat]
     }
 

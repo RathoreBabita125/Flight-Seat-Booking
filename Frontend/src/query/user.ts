@@ -1,6 +1,5 @@
 import { gql } from '@apollo/client';
 
-
 export const GET_ME = gql`
     query GetMe {
         getMe {
@@ -10,8 +9,28 @@ export const GET_ME = gql`
             role
             age
             gender
+            phone
         }
     }
+`;
+
+export const GET_USERS = gql`
+  query GetAllUsers (
+    $filter: UserFilterInput
+  ){
+    getAllUsers(
+        filter: $filter
+    ){
+      id
+      fullName
+      email
+      gender
+      age
+      phone
+      role
+      createdAt
+    }
+  }
 `;
 
 export const SIGNUP = gql`
@@ -82,3 +101,25 @@ export const FORGET_PASSWORD = gql`
         }
     }
 `;
+
+export const CHANGE_PASSWORD = gql`
+    mutation ChangePassword(
+        $oldPassword: String!
+        $newPassword: String!
+    ) {
+        changePassword(
+            oldPassword: $oldPassword
+            newPassword: $newPassword
+        ) {
+            message
+        }
+    }
+`;
+
+export const LOGOUT=gql`
+    mutation Logout{
+        logout{
+            message
+        }
+    }
+`

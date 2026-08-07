@@ -8,7 +8,8 @@ export const resolvers={
     Query:{
         ...userResolver.Query,
         ...adminResolver.Query,
-        ...seatResolver.Query
+        ...seatResolver.Query,
+        ...passengerResolver.Query,
     },
     Mutation:{
         ...userResolver.Mutation,

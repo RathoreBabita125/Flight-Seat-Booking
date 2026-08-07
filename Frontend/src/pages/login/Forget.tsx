@@ -1,6 +1,6 @@
 import { Box, Button, IconButton, InputAdornment, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import type { FormError } from "../../datatypes/datatypes";
 import { toast } from "react-toastify";
 import { handleInput } from "../../validators/handleInputs";
@@ -11,6 +11,9 @@ import { FORGET_PASSWORD } from "../../query/user";
 import type { UserFormData } from "../../datatypes/datatypes";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { useSelector } from "react-redux";
+import type { RootState } from "../../redux/store";
+import LoadingCompo from "../../common/Loading";
 
 const ForgotPassword = () => {
 
@@ -32,6 +35,14 @@ const ForgotPassword = () => {
         password: "",
         confirmPassword: "",
     });
+
+    const { userAuth, loading } = useSelector((state: RootState) => state.userData);
+
+    if (loading) return <LoadingCompo />
+
+    if (userAuth?.role) {
+        return <Navigate to="/dashboard" replace />;
+    }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         handleInput(event, formData, setFormData, error, setError);
