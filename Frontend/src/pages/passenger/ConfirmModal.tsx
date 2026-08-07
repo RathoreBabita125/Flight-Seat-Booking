@@ -26,6 +26,7 @@ const ConfirmSeatModal = ({ open, onClose, selectedSeat }: ConfirmSeatProps) => 
             if (response) {
                 toast.success("Seat have been booked successfully.");
             }
+            onClose();
 
         } catch (error) {
             toast.error((error as Error).message);
