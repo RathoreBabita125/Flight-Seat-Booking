@@ -111,12 +111,12 @@ export const userResolver = {
                 }
 
                 const token = generateToken(payloadData);
-                context.res.cookie("token", token,
-                    {
-                        httpOnly: true,
-                        maxAge: 7 * 24 * 60 * 60 * 1000
-                    }
-                );
+                context.res.cookie("token", token, {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "none",
+                    maxAge: 7 * 24 * 60 * 60 * 1000,
+                });
 
                 return {
                     message: "You have successfully logged in.",
@@ -137,7 +137,9 @@ export const userResolver = {
 
                 context.res.clearCookie("token", {
                     httpOnly: true,
-                    maxAge: 7 * 24 * 60 * 60 * 1000
+                    secure: true,
+                    sameSite: "none",
+                    maxAge: 7 * 24 * 60 * 60 * 1000,
                 });
 
                 return {
