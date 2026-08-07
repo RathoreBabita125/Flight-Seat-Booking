@@ -7,7 +7,7 @@ import { resolvers } from './src/controllers/resolvers';
 import { expressMiddleware } from '@as-integrations/express5';
 import { MyContext } from './src/datatypes/datatypes';
 import cors from 'cors';
-import { AuthMiddleware } from './src/middlewares/authMiddleware';
+import { AuthMiddleware } from './src/middlewares/AuthMiddleware';
 import cookieParser from 'cookie-parser';
 import { seedAdmin } from './src/seed/seedAdmin';
 import { seedSeats } from './src/seed/seedSeat';
