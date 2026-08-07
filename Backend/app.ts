@@ -17,10 +17,14 @@ dotenv.config();
 const PORT = process.env.PORT;
 const app = express();
 app.use(cookieParser());
-app.use(cors({
-    origin:process.env.CLIENT_URL,
-    credentials:true
-}));
+
+app.options(
+  "*",
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  })
+);
 
 const serverStart = async () => {
 
@@ -38,20 +42,23 @@ const serverStart = async () => {
 
         await server.start();
 
-
         app.use('/graphql',
             express.json(),
+            cors({
+                origin: process.env.CLIENT_URL,
+                credentials: true
+            }),
             expressMiddleware(server, {
-            context: async({req, res}):Promise<MyContext> => {
-                const user=AuthMiddleware(req)
-                return {
-                    req,
-                    res,
-                    user,
-                    db:AppDataSource
+                context: async ({ req, res }): Promise<MyContext> => {
+                    const user = AuthMiddleware(req)
+                    return {
+                        req,
+                        res,
+                        user,
+                        db: AppDataSource
+                    }
                 }
-            }
-        }));
+            }));
 
         app.listen(PORT, () => {
             console.log("The server is running at port : ", PORT);
