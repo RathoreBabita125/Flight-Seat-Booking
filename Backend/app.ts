@@ -23,8 +23,6 @@ app.use(cors({
   credentials: true,
 }));
 
-app.options("*", cors());
-
 const serverStart = async () => {
 
     try {
