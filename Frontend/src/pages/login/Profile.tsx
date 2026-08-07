@@ -52,7 +52,7 @@ const Profile = () => {
                         </Avatar>
 
                         <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                            Babita
+                            {userAuth?.fullName}
                         </Typography>
 
                         <Chip
