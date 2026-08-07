@@ -1,4 +1,4 @@
-import { BookingDetails, BookingResponse, BookingStatus, MyContext, SeatStatus, UserRole } from "../datatypes/datatypes";
+import { BookingDetails, BookingFilter, BookingResponse, BookingStatus, GenderType, MyContext, SeatStatus, userFilterProps, UserRole } from "../datatypes/datatypes";
 import { Booking } from "../modules/bookingModule";
 import { Seat } from "../modules/seatModule";
 import { User } from "../modules/userModule";
@@ -6,27 +6,41 @@ import { User } from "../modules/userModule";
 export const adminResolver = {
 
     Query: {
-        getAllUsers: async (_: any, __: any, context: MyContext) => {
+        getAllUsers: async (_: any, args: { filter?: { fullName?: string; gender?: string; } }, context: MyContext) => {
             const userRepo = context.db.getRepository(User);
-            console.log("Current user: ", context.user)
-
-            if (!context.user) {
-                throw new Error("You are not logged in. First login to get info.")
-            }
             try {
-                if (context.user?.role === UserRole.ADMIN) {
-                    const allUsers = await userRepo.find();
-                    return allUsers;
+
+                if (!context.user) {
+                    throw new Error("You are not logged in. First login to get info.");
                 }
-                else {
+                if (context.user?.role !== UserRole.ADMIN) {
                     throw new Error("Unauthorized access. Only admin can access.");
                 }
+
+                const { filter } = args;
+                const query = userRepo.createQueryBuilder("user").take(10).skip(0);
+
+                if (filter?.fullName) {
+                    query.andWhere("user.fullName ILIKE :fullName", {
+                        fullName: `%${filter.fullName}%`,
+                    });
+                }
+
+                if (filter?.gender) {
+                    query.andWhere("user.gender = :gender", {
+                        gender: filter.gender,
+                    });
+                }
+
+                const allUsers = await query.getMany();
+                return allUsers;
+
             } catch (error) {
                 throw new Error(`You don't have access to get all users info. ${(error as Error).message}`);
             }
         },
 
-        getAllBookings: async (_: any, { status, search }: { status: BookingStatus, search?: string }, context: MyContext) => {
+        getAllBookings: async (_: any,  { filter }: { filter?: BookingFilter }, context: MyContext) => {
             const bookingRepo = context.db.getRepository(Booking);
             try {
                 if (context.user?.role === UserRole.ADMIN) {
@@ -35,21 +49,29 @@ export const adminResolver = {
                         .leftJoinAndSelect("booking.seat", "seat")
                         .leftJoinAndSelect("booking.user", "user");
 
-                    if (status) {
-                        allBookings.andWhere("booking.status = :status", {
-                            status,
+                    if (filter?.status) {
+                        allBookings.andWhere("booking.status = :status", {  
+                            status: filter.status,
                         });
                     }
 
-                    if (search) {
-                        allBookings.andWhere(
-                            "(user.fullName ILIKE :search OR seat.seatNumber ILIKE :search)",
-                            {
-                                search: `%${search}%`,
-                            }
-                        );
+                    if (filter?.fullName) {
+                        allBookings.andWhere("user.fullName ILIKE :fullName", {
+                            fullName: `%${filter.fullName}%`,
+                        });
                     }
 
+                    if (filter?.gender) {
+                        allBookings.andWhere("user.gender ILIKE :gender", {
+                            fullName: `%${filter.gender}%`,
+                        });
+                    }
+
+                    if (filter?.seatNumber) {
+                        allBookings.andWhere("seat.seatNumber ILIKE :seatNumber", {
+                            seatNumber: `%${filter.seatNumber}%`,
+                        });
+                    }
                     return allBookings.getMany();
                 }
                 else {
@@ -78,14 +100,14 @@ export const adminResolver = {
 
                 await seatRepo.update(
                     {
-                        status:SeatStatus.BOOKED
+                        status: SeatStatus.BOOKED
                     },
                     {
                         status: SeatStatus.AVAILABLE
                     }
                 );
 
-                const savedBooking=await bookingRepo.update(
+                const savedBooking = await bookingRepo.update(
                     {
                         status: BookingStatus.CONFIRMED
                     },

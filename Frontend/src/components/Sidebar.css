@@ -5,16 +5,16 @@
 }
 
 .show-active-style:hover {
-  background-color: #e6f7f8;
+  background-color: #314B5A;
 }
 
 .show-active-style.active {
-  background-color: #00a7b5;
-  color: #fff;
+  background-color: #314B5A;
+  color: #314B5A;
   font-weight: 600;
   box-shadow: 0 4px 10px rgba(0, 167, 181, 0.3);
 }
 
 .show-active-style.active .icon {
-  color: #fff;
+  color: #314B5A;
 }

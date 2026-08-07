@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import PassengerDashboard from "../pages/passenger/Passenger";
+import PassengerDashboard from "../pages/passenger/PassengerDashboard";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import { useSelector } from "react-redux";
 import type { RootState } from "../redux/store";

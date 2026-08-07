@@ -106,7 +106,7 @@ const Sidebar = ({ mobileOpen, setMobileOpen, drawerWidth }: NavbarProps) => {
                                     textDecoration: "none",
                                     color: "inherit",
                                 }}
-                                to='check-seats'
+                                to='book-seat'
                             >
                                 {({ isActive }) => (
                                     <ListItemButton

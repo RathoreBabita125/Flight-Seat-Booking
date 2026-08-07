@@ -20,24 +20,32 @@ export const bookingSchema=gql`
         bookings:Booking
     }
 
+    input BookingFilterInput {
+        status:BookingStatus
+        fullName:String
+        gender:Gender
+        seatNumber:String
+        search:String
+    }
+
     type Query {
         getAllBookings(
-            status:BookingStatus
-            search:String
+            filter: BookingFilterInput  
+        ):[Booking]
+
+        myAllBookings(
+            filter: BookingFilterInput  
         ):[Booking]
     }
     
     type Mutation{
 
         bookingSeat(
-            status:BookingStatus
             seat:ID
-            user:ID
         ):BookingResponse
 
         cancelBooking(
             id:ID
-            status:BookingStatus
         ):BookingResponse
 
         autoAssignSeat:BookingResponse

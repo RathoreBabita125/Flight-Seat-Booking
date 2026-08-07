@@ -1,49 +1,45 @@
 import { Box, Button, Stack, Typography, type SelectChangeEvent } from '@mui/material';
 import { useMutation, useQuery } from '@apollo/client/react';
 import { GET_ALL_SEATS } from '../../query/seat';
-import type { GetAllBookingsResponse, GetAllSeatsResponse, SearchType, SeatStatus } from '../../datatypes/datatypes';
+import type { GetAllSeatsResponse, SearchType, SeatStatus } from '../../datatypes/datatypes';
 import SeatGrid from '../../common/SeatGrid';
 import LoadingCompo from '../../common/Loading';
-import { useState } from 'react';
-import AutorenewIcon from '@mui/icons-material/Autorenew';
+import FlightIcon from '@mui/icons-material/Flight';
 import BookingPopupModal from '../../common/BookingPopupModal';
-import { GET_ALL_BOOKINGS, RESET_ALL_BOOKING } from '../../query/booking';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { AUTO_ASSIGN_SEAT, MY_BOOKING } from '../../query/booking';
 import SearchForm from '../../common/SearchForm';
 
-const SeatManagement = () => {
+const BookSeat = () => {
 
-    const { data: BookingData, loading: bookingLoading } = useQuery<GetAllBookingsResponse>(GET_ALL_BOOKINGS);
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [searchBy, setSearchBy] = useState<SearchType>("status");
-    const [searchValue, setSearchValue] = useState<SeatStatus | "">("");
+    const [searchValue, setSearchValue] = useState("");
+
+    const [autoAssignSeat] = useMutation(AUTO_ASSIGN_SEAT, {
+        refetchQueries: [MY_BOOKING],
+        variables: {
+            status: searchValue === "" ? undefined : searchValue,
+        }
+    });
 
     const { data: seatData, loading: seatLoading, refetch: refetchSeats } = useQuery<GetAllSeatsResponse>(GET_ALL_SEATS);
 
-    const [resetAllBooking] = useMutation(RESET_ALL_BOOKING,
-        {
-            refetchQueries: [{ query: GET_ALL_SEATS }],
-            variables: {
-                status: searchValue || undefined
-            }
-        }
-    );
+    if (seatLoading) return <LoadingCompo />
 
-    if (seatLoading || bookingLoading) return <LoadingCompo />
-
-    const handleResetBooking = async () => {
+    const handleConfirmBooking = async () => {
         try {
-            const response = await resetAllBooking();
-            if (response) {
-                toast.success("All bookings has been reset successfully.");
-                setConfirmOpen(false);
-            }
+            const { data } = await autoAssignSeat();
+            console.log(data);
+            toast.success("Auto-seat has been booked successfully.");
+            setConfirmOpen(false);
         } catch (error) {
-            toast.error((error as Error).message);
+            toast.error((error as Error).message)
         }
-    }
+    };
 
-   const handleSearchByChange = (event: SelectChangeEvent) => {
+    const handleSearchByChange = (event: SelectChangeEvent) => {
         setSearchBy(event.target.value as SearchType);
         setSearchValue("");
     };
@@ -61,7 +57,6 @@ const SeatManagement = () => {
                     : undefined,
         });
     };
-
     return (
         <>
             <Box sx={{ mt: 10, padding: 5 }}>
@@ -77,7 +72,7 @@ const SeatManagement = () => {
                     }}
                 >
                     <Typography variant="h5" sx={{ color: "#314B5A", fontWeight: 600 }}>
-                        Check seat Details
+                        Book Seat Now
                     </Typography>
                     <SearchForm
                         searchValue={searchValue}
@@ -89,28 +84,23 @@ const SeatManagement = () => {
                     <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
                         <Button
                             variant="outlined"
-                            startIcon={<AutorenewIcon />}
+                            startIcon={<FlightIcon />}
                             sx={{ color: '#314B5A' }}
                             onClick={() => setConfirmOpen(true)}
                         >
-                            Reset All Bookings
+                            Auto Seat Booking
                         </Button>
                     </Box>
                 </Box>
                 <Stack direction={'row'} sx={{ flexWrap: "wrap", mt: 5, gap: 3.5, border: '5px solid #314B5A', padding: 3 }}>
                     {
                         seatData?.getAllSeats?.map((seat) => {
-                            console.log('seat id : ', seat.id);
-                            const bookedSeatData = BookingData?.getAllBookings?.filter((booking) => {
-                                return booking.seat.id === seat.id
-                            });
-                            
                             return (
                                 <SeatGrid
                                     key={seat.id}
                                     status={seat.status}
                                     seatNumber={seat.seatNumber}
-                                    bookedSeatData={bookedSeatData}
+                                    selectedSeat={seat.id}
                                 />
                             )
                         })
@@ -118,13 +108,13 @@ const SeatManagement = () => {
                 </Stack>
                 <BookingPopupModal
                     open={confirmOpen}
-                    title="Reset All Booking"
-                    message="Are you sure you want to reset all booking?"
-                    onConfirm={handleResetBooking}
+                    title="Confirm Auto Booking"
+                    message="Are you sure you want to auto-booking?"
+                    onConfirm={handleConfirmBooking}
                     onCancel={() => setConfirmOpen(false)}
                 />
             </Box>
         </>
     );
 }
-export default SeatManagement;  
+export default BookSeat;  

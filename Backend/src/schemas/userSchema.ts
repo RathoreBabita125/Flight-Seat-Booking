@@ -21,6 +21,17 @@ export const userSchema=gql`
         gender:Gender!
         age:Int!
         phone:String!
+        createdAt:String!
+    }
+
+    input UserFilterInput {
+        fullName: String
+        gender: String
+    }
+
+    input PaginatedInput{
+        page:Int!
+        limit:Int!
     }
 
     type UserResponse{
@@ -30,7 +41,10 @@ export const userSchema=gql`
     }
 
     type Query{
-        getAllUsers:[User]
+        getAllUsers(
+           filter: UserFilterInput  
+           pagination:PaginatedInput
+        ):[User]
         getMe:User
     }
 
