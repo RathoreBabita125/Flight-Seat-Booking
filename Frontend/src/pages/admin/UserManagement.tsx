@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { useState } from "react";
-import type { GetAllUsersResponse, User } from "../../datatypes/datatypes";
+import type { BookingFilter, GetAllUsersResponse, User } from "../../datatypes/datatypes";
 import { useQuery } from "@apollo/client/react";
 import { GET_USERS } from "../../query/user";
 import LoadingCompo from "../../common/Loading";
@@ -20,9 +20,9 @@ import FilterModal from "../filter/FilterModal";
 
 const UserManagement = () => {
     const [openFilter, setOpenFilter] = useState(false);
-    const [filter, setFilter] = useState({
-        fullName: '',
-        gender: ''
+    const [filter, setFilter] = useState<BookingFilter>({
+        fullName: "",
+        gender: ""
     });
     const { data, loading } = useQuery<GetAllUsersResponse>(GET_USERS, {
         variables: {

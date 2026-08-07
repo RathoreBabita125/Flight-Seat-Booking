@@ -81,7 +81,7 @@ const SeatGrid = ({ seatNumber, status, selectedSeat, bookedSeatData}: SeatProps
                     onClose={() => setOpenBookingDetails(false)}
                     status={status}
                     seatNumber={seatNumber}
-                    bookedSeatData={bookedSeatData}
+                    bookedSeatData={bookedSeatData || []}
                 />
             }
              {

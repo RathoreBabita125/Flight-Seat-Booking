@@ -1,3 +1,5 @@
+import type { SelectChangeEvent } from "@mui/material";
+
 export interface UserFormData {
   fullName?: string;
   email?: string;
@@ -179,6 +181,7 @@ export interface SeatState {
 export interface BookingFilter {
   seatNumber?: string;
   passengerName?: string;
+  fullName?: string;
   status?: string;
   gender?: string;
   bookingDate?: string;
@@ -195,7 +198,6 @@ export interface FilterModalProps {
   onClose: () => void;
   setOpenFilter: React.Dispatch<React.SetStateAction<boolean>>;
   setFilter: React.Dispatch<React.SetStateAction<BookingFilter>>;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
   columnOptions: ColumnOption[];
   filterField: (keyof BookingFilter)[];
   filter: BookingFilter;
@@ -224,10 +226,10 @@ export type SearchOptions = {
 
 export type SearchTypeProps={
   searchBy:string;
-  setSearchBy:React.Dispatch<React.SetStateAction<string>>;
+  setSearchBy: React.Dispatch<React.SetStateAction<SearchType>>;
   searchValue:string;
-  setSearchValue:React.Dispatch<React.SetStateAction<string>>;
-  handleSearchByChange:() => void;
+  setSearchValue:React.Dispatch<React.SetStateAction<"" | SeatStatus>>;
+  handleSearchByChange:(event: SelectChangeEvent<string>) => void;
   handleSearch:() => void;
 }
 
@@ -236,3 +238,4 @@ export type SeatStatus = "Booked" | "Available";
 export interface GetAllSeatsVariables {
     status?: SeatStatus;
 }
+

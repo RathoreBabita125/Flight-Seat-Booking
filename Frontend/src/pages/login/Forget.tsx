@@ -51,7 +51,7 @@ const ForgotPassword = () => {
     const handleOnBlur = (
         event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
-        handleOnBlurInput(event, formData, error, setError);
+        handleOnBlurInput(event, formData, setError);
     };
 
     const handleResetPassword = async () => {

@@ -14,7 +14,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import { useMutation, useQuery } from "@apollo/client/react";
 import LoadingCompo from "../../common/Loading";
 import { CANCEL_BOOKING, GET_ALL_BOOKINGS } from "../../query/booking";
-import type { Booking, GetAllBookingsResponse } from "../../datatypes/datatypes";
+import type { Booking, BookingFilter, GetAllBookingsResponse } from "../../datatypes/datatypes";
 import { useState } from "react";
 import FilterModal from "../filter/FilterModal";
 import { bookingColumnOptions, bookingFilterField } from "../../constants/const";
@@ -25,8 +25,8 @@ const BookinManagement = () => {
 
     const [openFilter, setOpenFilter] = useState(false);
     const [confirmOpen, setConfirmOpen] = useState(false);
-    const [selectedBooking, setSelectedBooking] = useState(null);
-    const [filter, setFilter] = useState({
+    const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+    const [filter, setFilter] = useState<BookingFilter>({
         fullName: '',
         seatNumber: '',
         status: '',
@@ -57,7 +57,7 @@ const BookinManagement = () => {
         try {
             const response = await cancelBooking({
                 variables: {
-                    id: selectedBooking.id
+                    id: selectedBooking?.id 
                 },
             });
             console.log(response);

@@ -43,7 +43,7 @@ const SeatManagement = () => {
         }
     }
 
-   const handleSearchByChange = (event: SelectChangeEvent) => {
+   const handleSearchByChange = (event: SelectChangeEvent<string>):void => {
         setSearchBy(event.target.value as SearchType);
         setSearchValue("");
     };
@@ -85,6 +85,7 @@ const SeatManagement = () => {
                         searchBy={searchBy}
                         handleSearchByChange={handleSearchByChange}
                         handleSearch={handleSearch}
+                        setSearchBy={setSearchBy}
                     />
                     <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
                         <Button

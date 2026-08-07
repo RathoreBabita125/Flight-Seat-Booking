@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import type { BookingFilter, FilterModalProps } from "../../datatypes/datatypes";
 import { bookingStatus, genders, seatStatus } from "../../constants/const";
 
-const FilterModal = ({ open, onClose, setOpenFilter, setFilter, setPage, columnOptions, filterField, filter }: FilterModalProps) => {
+const FilterModal = ({ open, onClose, setOpenFilter, setFilter, columnOptions, filterField, filter }: FilterModalProps) => {
     const [inputValue, setInputValue] = useState<string>("");
     const [column, setColumn] = useState<keyof BookingFilter | "">("");
 
@@ -22,10 +22,7 @@ const FilterModal = ({ open, onClose, setOpenFilter, setFilter, setPage, columnO
     }, [open, filter, filterField]);
 
     const handleApply = () => {
-
-        console.log("Selected column:", column);
-        console.log("Input value:", inputValue);
-
+        
         if (!column) return;
 
         const resetInputField: BookingFilter = {};
@@ -49,7 +46,6 @@ const FilterModal = ({ open, onClose, setOpenFilter, setFilter, setPage, columnO
             resetInputField[field] = "";
         });
         setFilter(resetInputField);
-        setPage(0);
     };
 
     const renderValueInput = () => {
