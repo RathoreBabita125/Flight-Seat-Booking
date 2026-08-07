@@ -1,13 +1,12 @@
-import type { FormData, FormError } from "../datatypes/datatypes";
+import type { UserFormData, FormError } from "../datatypes/datatypes";
 import { formValidate } from "./formValidators";
 
 export const handleOnBlurInput = (
     event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
-    data: FormData,
-    error: FormError,
+    data: UserFormData,
     setError: React.Dispatch<React.SetStateAction<FormError>>
 ) => {
-    const name = event.target.name as keyof FormData;
+    const name = event.target.name as keyof FormData & string;
     const value = event.target.value;
 
     const newUser = { ...data, [name]: value };
@@ -16,6 +15,4 @@ export const handleOnBlurInput = (
         ...pre,
         [name]: newError
     }));
-
-
 };

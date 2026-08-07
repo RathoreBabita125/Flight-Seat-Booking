@@ -6,7 +6,7 @@ const ViewBookingDetails = ({ open, onClose, status, seatNumber, bookedSeatData 
         <>
             <Dialog
                 open={open}
-                onClose={(event, reason) => {
+                onClose={(_, reason) => {
                     if (reason === 'backdropClick' || reason === 'escapeKeyDown') {
                         return;
                     }

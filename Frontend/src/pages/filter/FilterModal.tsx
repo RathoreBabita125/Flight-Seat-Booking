@@ -1,16 +1,16 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import ClearIcon from '@mui/icons-material/Clear';
 import { useEffect, useState } from "react";
-import type { BookingFilter, FilterColumn, FilterModalProps } from "../../datatypes/datatypes";
+import type { BookingFilter, FilterModalProps } from "../../datatypes/datatypes";
 import { bookingStatus, genders, seatStatus } from "../../constants/const";
 
 const FilterModal = ({ open, onClose, setOpenFilter, setFilter, setPage, columnOptions, filterField, filter }: FilterModalProps) => {
     const [inputValue, setInputValue] = useState<string>("");
-    const [column, setColumn] = useState<keyof FilterColumn | "">("");
+    const [column, setColumn] = useState<keyof BookingFilter | "">("");
 
     useEffect(() => {
         if (open && filter) {
-            const activeField = filterField.find((field: string) => filter[field]);
+            const activeField = filterField.find((field) => Boolean(filter[field]));
             if (activeField) {
                 setColumn(activeField);
                 setInputValue(filter[activeField] ?? "");
@@ -28,12 +28,11 @@ const FilterModal = ({ open, onClose, setOpenFilter, setFilter, setPage, columnO
 
         if (!column) return;
 
-        const resetInputField: FilterColumn = {};
+        const resetInputField: BookingFilter = {};
 
-        filterField.forEach((field: keyof FilterColumn) => {
+        filterField.forEach((field: keyof BookingFilter) => {
             resetInputField[field] = undefined;
         });
-
         const updatedFilter = {
             ...resetInputField,
             [column]: inputValue,
@@ -123,7 +122,7 @@ const FilterModal = ({ open, onClose, setOpenFilter, setFilter, setPage, columnO
     return (
         <Dialog
             open={open}
-            onClose={(event, reason) => {
+            onClose={(_, reason) => {
                 if (reason === "backdropClick" || reason === "escapeKeyDown") {
                     return;
                 }

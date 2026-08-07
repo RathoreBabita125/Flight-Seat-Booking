@@ -37,7 +37,7 @@ const ConfirmSeatModal = ({ open, onClose, selectedSeat }: ConfirmSeatProps) => 
         <>
             <Dialog
                 open={open}
-                onClose={(event, reason) => {
+                onClose={(_, reason) => {
                     if (reason === 'backdropClick' || reason === 'escapeKeyDown') {
                         return;
                     }

@@ -14,7 +14,7 @@ const BookMySeatModal = ({ open, onClose, seatNumber, selectedSeat }: BookMySeat
         <>
             <Dialog
                 open={open}
-                onClose={(event, reason)=>{
+                onClose={(_, reason)=>{
                     if(reason==='backdropClick' || reason==='escapeKeyDown'){
                         return;
                     }

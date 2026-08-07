@@ -77,7 +77,7 @@ const ChangePasswordModal = ({ open, onClose }: ChangePasswordProps) => {
         <>
             <Dialog
                 open={open}
-                onClose={(event, reason) => {
+                onClose={(_, reason) => {
                     if (reason === 'backdropClick' || reason === 'escapeKeyDown') {
                         return;
                     }
