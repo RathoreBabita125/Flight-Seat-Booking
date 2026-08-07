@@ -1,15 +1,15 @@
-import type { FormData, FormError } from "../datatypes/datatypes";
+import type { UserFormData, FormError } from "../datatypes/datatypes";
 import { formValidate } from "./formValidators";
 
 export const handleInput=(
     event: React.ChangeEvent<HTMLInputElement>, 
-    data:FormData,
-    setData:React.Dispatch<React.SetStateAction<FormData>>,
+    data:UserFormData,
+    setData:React.Dispatch<React.SetStateAction<UserFormData>>,
     error:FormError,
     setError:React.Dispatch<React.SetStateAction<FormError>>
 )=>
 {
-    const name = event.target.name as keyof FormData;
+    const name = event.target.name as keyof UserFormData;
     const value=event.target.value;
     const newUser={...data, [name]:value};
     setData(newUser);

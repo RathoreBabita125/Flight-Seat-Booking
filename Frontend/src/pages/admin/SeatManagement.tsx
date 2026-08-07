@@ -85,7 +85,6 @@ const SeatManagement = () => {
                         searchBy={searchBy}
                         handleSearchByChange={handleSearchByChange}
                         handleSearch={handleSearch}
-                        setSearchBy={setSearchBy}
                     />
                     <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
                         <Button

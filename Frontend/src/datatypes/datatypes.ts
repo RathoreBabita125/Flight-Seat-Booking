@@ -226,7 +226,6 @@ export type SearchOptions = {
 
 export type SearchTypeProps={
   searchBy:string;
-  setSearchBy: React.Dispatch<React.SetStateAction<SearchType>>;
   searchValue:string;
   setSearchValue:React.Dispatch<React.SetStateAction<"" | SeatStatus>>;
   handleSearchByChange:(event: SelectChangeEvent<string>) => void;

@@ -15,7 +15,7 @@ const BookSeat = () => {
 
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [searchBy, setSearchBy] = useState<SearchType>("status");
-    const [searchValue, setSearchValue] = useState("");
+    const [searchValue, setSearchValue] = useState<"" | SeatStatus>("");
 
     const [autoAssignSeat] = useMutation(AUTO_ASSIGN_SEAT, {
         refetchQueries: [MY_BOOKING],

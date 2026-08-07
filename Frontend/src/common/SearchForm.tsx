@@ -7,7 +7,7 @@ import {
     Button,
     TextField,
 } from "@mui/material";
-import type { SearchTypeProps } from "../datatypes/datatypes";
+import type { SearchTypeProps, SeatStatus } from "../datatypes/datatypes";
 import { searchOptions } from "../constants/const";
 
 const SearchForm = ({
@@ -33,7 +33,7 @@ const SearchForm = ({
                     <Select
                         value={searchValue}
                         label="Select Status"
-                        onChange={(e) => setSearchValue(e.target.value)}
+                        onChange={(e) => setSearchValue(e.target.value as SeatStatus)}
                         size="small"
                         color="success"
                     >
@@ -50,7 +50,7 @@ const SearchForm = ({
                     size="small"
                     label="Seat Number"
                     value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
+                    onChange={(e) => setSearchValue(e.target.value as SeatStatus)}
                 />
             )}
 
