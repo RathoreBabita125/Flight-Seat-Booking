@@ -18,13 +18,12 @@ const PORT = process.env.PORT;
 const app = express();
 app.use(cookieParser());
 
-app.options(
-  "*",
-  cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: process.env.CLIENT_URL,
+  credentials: true,
+}));
+
+app.options("*", cors());
 
 const serverStart = async () => {
 
@@ -44,10 +43,6 @@ const serverStart = async () => {
 
         app.use('/graphql',
             express.json(),
-            cors({
-                origin: process.env.CLIENT_URL,
-                credentials: true
-            }),
             expressMiddleware(server, {
                 context: async ({ req, res }): Promise<MyContext> => {
                     const user = AuthMiddleware(req)
