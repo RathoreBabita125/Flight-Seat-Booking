@@ -1,6 +1,8 @@
 {
   "scripts": {
-    "dev": "tsx watch app.ts"
+    "dev": "tsx watch app.ts",
+    "build": "echo Build Complete",
+    "start": "tsx app.ts"
   },
   "dependencies": {
     "@apollo/server": "^5.5.1",
